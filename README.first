@@ -1,0 +1,21 @@
+You have downloaded the wiimote perl module.  I have made a perl interface to Joel Andersson's C library  ( http://sourceforge.net/projects/libwiimote/ ) .  Included in this download is a snapshot of his library and the perl interface I wrote.
+
+First read Joel's README.  Follow his instructions and get his libcwiimote working.  Be sure to make sure his test applications work.  Then copy files ./lib/libcwiimote.so and ./lib/libcwiimote.a into /usr/local/lib (or wherever you store you libraries) and run ldconfig.  He doesn't have a make install as part of his package so you have to install those two libraries by hand.
+
+Next go into the perlmodules directory.  Just run
+perl Makefile.PL
+make
+make install
+
+To test, open up test.pl.  You will need to change line:
+print "Connect " . Wiimote::wiimote_connect('00:19:1D:75:CC:30');
+
+Just put in the id of your wiimote.  The run ./test.pl and with luck it will work.
+
+This is a very rough module.  It is very quick and dirty, but lets perl have access to most functions of the wiimote.
+
+thanks
+chad phillips
+chad@chadphillips.org
+http://www.windmeadow.com
+
