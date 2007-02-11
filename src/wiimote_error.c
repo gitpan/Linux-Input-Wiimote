@@ -1,4 +1,4 @@
-/* $Id: wiimote_api.h 15 2007-01-09 01:19:31Z bja $ 
+/* $Id: wiimote_error.c 15 2007-01-09 01:19:31Z bja $ 
  *
  * Copyright (C) 2007, Joel Andersson <bja@kth.se>
  * 
@@ -16,27 +16,48 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
- 
-#ifndef _WIIMOTE_API_H_
-#define _WIIMOTE_API_H_
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdarg.h>
+#include <string.h>
 
 #include "wiimote.h"
-#include "wiimote_link.h"
-#include "wiimote_io.h"
-#include "wiimote_event.h"
-#include "wiimote_ir.h"
 #include "wiimote_error.h"
-#include "wiimote_util.h"
-#include "wiimote_report.h"
-#include "wiimote_speaker.h"
 
-#define wiimote_is_open(w)		((w)->link.status == WIIMOTE_STATUS_CONNECTED)
-#define wiimote_is_closed(w)	(!wiimote_is_open(w))
+#define WIIMOTE_ERROR_STR_LEN	1024
+static char __wiimote_error_str[WIIMOTE_ERROR_STR_LEN];
 
-wiimote_t *wiimote_open(const char *host);
-int wiimote_close(wiimote_t *wiimote);
-int wiimote_copy(wiimote_t *source, wiimote_t *dest);
-int wiimote_enable(wiimote_t *wiimote, int feature);
-int wiimote_disable(wiimote_t *wiimote, int feature);
+/*
+ * 
+ */
+void wiimote_error(const char *fmt, ...)
+{
+	va_list ap;
+	va_start(ap, fmt);
+	memset(__wiimote_error_str, 0, WIIMOTE_ERROR_STR_LEN);
+	vsnprintf(__wiimote_error_str, WIIMOTE_ERROR_STR_LEN, fmt, ap);
+//#ifdef _DEBUG
+	va_end(ap);
+	va_start(ap, fmt);
+	vfprintf(stderr, fmt, ap);
+	fprintf(stderr, "\n");
+//#endif
+	va_end(ap);
+}
 
-#endif /* _WIIMOTE_API_H_ */
+/*
+ * 
+ */
+void wiimote_perror(const char *msg)
+{
+	fprintf(stderr, "%s: %s\n", msg, __wiimote_error_str);
+}
+
+/*
+ * 
+ */
+const char *wiimote_get_error(void)
+{
+	return __wiimote_error_str;
+}

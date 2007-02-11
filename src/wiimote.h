@@ -1,4 +1,4 @@
-/* $Id: wiimote.h 29 2007-02-07 22:30:19Z bja $ 
+/* $Id: wiimote.h 16 2007-01-22 21:51:27Z bja $ 
  *
  * Copyright (C) 2007, Joel Andersson <bja@kth.se>
  * 
@@ -127,11 +127,11 @@ typedef struct {
  * A point returned from the IR camera.
  */
 typedef struct {
-  uint8_t x;		/* Position of point on x-axis.*/
-  uint8_t y;		/* Position of point on y-axis. */
-  uint8_t ss : 4;	/* Size of point. */
-  uint8_t xx : 2;	/* Most significant bits of x. */
-  uint8_t yy : 2;	/* Most significant bits of y. */
+  uint8_t x;			/* Position of point on x-axis.*/
+  uint8_t y;			/* Position of point on y-axis. */
+  uint8_t ss : 4;		/* Size of point. */
+  uint8_t xx : 2;		/* Most significant bits of x. */
+  uint8_t yy : 2;		/* Most significant bits of y. */
 } __attribute__((packed)) wiimote_point2_t;
 
 typedef struct {
@@ -146,10 +146,9 @@ typedef struct {
 typedef struct {
   char r_addr[19]; 	/* Bluetooth address of the wiimote. */
   char l_addr[19]; 	/* Bluetooth address of the local host. */
-  int status;		/* Current connection status. */
-  int device;		/* Bluetooth device number (1-HCI_MAX_DEV). */
-  int s_intr;		/* HID interrupt socket. */
-  int s_ctrl;		/* HID control socket. */
+  int status;			/* Current connection status. */
+  int s_intr;			/* HID interrupt socket. */
+  int s_ctrl;			/* HID control socket. */
 } wiimote_link_t;
 
 typedef struct {
@@ -216,7 +215,8 @@ typedef struct {
   wiimote_ir_t ir3;		/* Third detected IR source. */
   wiimote_ir_t ir4;		/* Fourth detected IR source. */
     
-  wiimote_cal_t cal;		/* Wiimote calibration data */    
+  wiimote_cal_t cal;		/* Wiimote calibration data */
+    
   wiimote_ext_port_t ext;	/* Current extension port state. */
 	
   wiimote_link_t link;		/* Current link state. */
@@ -225,9 +225,13 @@ typedef struct {
   uint8_t speaker;		/* ... */
   uint8_t battery;		/* Current battery status. */
 
+#ifdef _ENABLE_TILT    
   wiimote_float3_t tilt;	/* The tilt of the wiimote in degrees. */
+#endif
 
+#ifdef _ENABLE_FORCE
   wiimote_float3_t force;	/* The force in g on each axis. */
+#endif
 
   struct {
     wiimote_mode_t mode;

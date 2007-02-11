@@ -12,7 +12,7 @@
         # names by default without a very good reason. Use EXPORT_OK instead.
         # Do not simply export all your public functions/methods/constants.
         our @EXPORT = qw( );
-        our $VERSION = '0.02';
+        our $VERSION = '0.03';
 
         bootstrap Linux::Input::Wiimote ;
 
@@ -322,9 +322,9 @@
 
 =head1 Example 
 
- use Wiimote;
+ use Linux::Input::Wiimote;
 
- my $wii = new Wiimote;
+ my $wii = new Linux::Input::Wiimote;
 
  $wii->wiimote_connect('00:19:1D:75:CC:30');
 
@@ -343,7 +343,6 @@
 =head1 Bugs 
 
   wiimote_discover can cause a segfault
-  tilt and force are not returning correct values.  This broke with latest version of libcwiimote .03
 
   
 =head1 Author

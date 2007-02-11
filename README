@@ -1,14 +1,14 @@
 You have downloaded the wiimote perl module.  I have made a perl interface to Joel Andersson's C library  ( http://sourceforge.net/projects/libwiimote/ ) .  
 
-Make sure that libcwiimote is installed and working before you try this perl module
+First read Joel's README.  Follow his instructions and get his libcwiimote working.  Be sure to make sure his test applications work.
 
-To install:
+Next go into the perlmodules directory.  Just run
 perl Makefile.PL
 make
 make install
 
 To test, open up test.pl.  You will need to change line:
-print "Connect " . Wiimote::wiimote_connect('00:19:1D:75:CC:30');
+print "Connect " . $wii->wiimote_connect('00:19:1D:75:CC:30');
 
 Just put in the id of your wiimote.  The run ./test.pl and with luck it will work.
 
@@ -18,9 +18,4 @@ thanks
 chad phillips
 chad@chadphillips.org
 http://www.windmeadow.com
-
-Changelog:
-Feb 11 2007:
-Added libcwiimote header files to the tarball.  
-Know bugs: rumble, tilt and axis are broken with the latest release of libcwiimote.  The C library is fine, I just need to update my perl code.
 

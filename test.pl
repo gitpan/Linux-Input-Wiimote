@@ -14,24 +14,27 @@ print qq!
 
 my $wii = new Linux::Input::Wiimote;
 
+#print "Connect " . $wii->wiimote_connect('00:19:1D:75:CC:30');
 print "Connect " . $wii->wiimote_connect('00:19:1D:A0:F7:95');
-print "\n-------------------\n";
+print "\n-------------------------------\n";
 
-print "Is open: " . $wii->wiimote_is_open();
-print "\n-------------------\n";
-while ( $wii->wiimote_is_open()  > -1) {
-    if ( $wii->wiimote_update() < 0) {
-        $wii->wiimote_disconnect();
-        print "stop on bad update \n";
-        exit;
-    }
+while ( $wii->wiimote_is_open() ) {
+    $wii->wiimote_update();
+
     if ( $wii->get_wiimote_keys_1 ) {
-        #$wii->set_wiimote_rumble(1);
-        $wii->set_wiimote_ir(1);
+        $wii->set_wiimote_rumble(1);
     }
     else {
         $wii->set_wiimote_rumble(0);
     }
+
+    if ( $wii->get_wiimote_keys_2 ) {
+        $wii->set_wiimote_ir(1);
+    }
+    else {
+        $wii->set_wiimote_ir(0);
+    }
+
     if ( $wii->get_wiimote_keys_a ) {
         $wii->activate_wiimote_accelerometer();
     }
@@ -39,38 +42,44 @@ while ( $wii->wiimote_is_open()  > -1) {
         $wii->deactivate_wiimote_accelerometer();
     }
 
-    print "Wiimote Key bits: " . $wii->get_wiimote_keys_bits();
-    print "\n";
+    print "Wiimote 	Key bits: " . $wii->get_wiimote_keys_bits() . "\n";
 
-    print "Wiimote X axis : " . $wii->get_wiimote_axis_x();
-    print " y axis : " . $wii->get_wiimote_axis_y();
-    print " z axis : " . $wii->get_wiimote_axis_z();
-    print "\n";
+    printf("		Axis X:%.3f   Y:%.3f  Z:%.3f \n",
+                 $wii->get_wiimote_axis_x(),
+                 $wii->get_wiimote_axis_y(),
+                 $wii->get_wiimote_axis_z()
+           );
 
-    print "Wiimote X tilt : " . $wii->get_wiimote_tilt_x();
-    print " y tilt : " . $wii->get_wiimote_tilt_y();
-    print " z tilt : " . $wii->get_wiimote_tilt_z();
-    print "\n";
 
-    print "Wiimote X force : " . $wii->get_wiimote_force_x();
-    print " y force : " . $wii->get_wiimote_force_y();
-    print " z force : " . $wii->get_wiimote_force_z();
-    print "\n";
+    printf("		Tilt X:%.3f   Y:%.3f  Z:%.3f \n",
+                 $wii->get_wiimote_tilt_x(),
+                 $wii->get_wiimote_tilt_y(),
+                 $wii->get_wiimote_tilt_z()
+           );
 
-    print "nunchuck X : " . $wii->get_wiimote_ext_nunchuk_axis_x();
-    print " Y : " . $wii->get_wiimote_ext_nunchuk_axis_y();
-    print " Z : " . $wii->get_wiimote_ext_nunchuk_axis_z();
-    print " Key c : " . $wii->get_wiimote_ext_nunchuk_keys_c();
-    print " Key z : " . $wii->get_wiimote_ext_nunchuk_keys_z();
-    print " Joystick x : " . $wii->get_wiimote_ext_nunchuk_joyx();
-    print " y : " . $wii->get_wiimote_ext_nunchuk_joyy();
-    print "\n-------------------\n";
+    printf("		Force X:%.3f   Y:%.3f  Z:%.3f \n",
+                 $wii->get_wiimote_force_x(),
+                 $wii->get_wiimote_force_y(),
+                 $wii->get_wiimote_force_z()
+          );
+
+    print "\n-------------------------------------\n";
+
+    printf("Nunchuck	Axis X:%.3f   Y:%.3f  Z:%.3f \n",
+                 $wii->get_wiimote_ext_nunchuk_axis_x(),
+                 $wii->get_wiimote_ext_nunchuk_axis_y(),
+                 $wii->get_wiimote_ext_nunchuk_axis_z()
+          );
+
+    print " 		Keys C : " . $wii->get_wiimote_ext_nunchuk_keys_c();
+    print " Z: " . $wii->get_wiimote_ext_nunchuk_keys_z() . "\n";
+    
+    print "		Joystick X: " . $wii->get_wiimote_ext_nunchuk_joyx();
+    print " Y: " . $wii->get_wiimote_ext_nunchuk_joyy();
+    print "\n-------------------------------------\n";
 
     if ( $wii->get_wiimote_keys_home ) {
-        print "open  = " . $wii->wiimote_is_open() ."\n";
         $wii->wiimote_disconnect();
-        print "open2  = " . $wii->wiimote_is_open() ."\n";
-        exit; 
     }
     if ( $wii->get_wiimote_keys_up ) {
         print "\n UP \n";

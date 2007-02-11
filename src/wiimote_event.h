@@ -1,4 +1,4 @@
-/* $Id: wiimote_event.h 31 2007-02-07 23:51:07Z bja $ 
+/* $Id: wiimote_event.h 15 2007-01-09 01:19:31Z bja $ 
  *
  * Copyright (C) 2007, Joel Andersson <bja@kth.se>
  * 
@@ -208,11 +208,5 @@ int wiimote_get_state(wiimote_t *wiimote, wiimote_state_t *state);
  * Updates the state of the specified wiimote.
  */
 int wiimote_update(wiimote_t *wiimote);
-
-/*
- * Returns an integer greater than zero if there is pending
- * data on the interrupt channel, otherwise returns zero.
- */
-int wiimote_pending(wiimote_t *wiimote);
 
 #endif /* _WIIMOTE_EVENT_H_ */
