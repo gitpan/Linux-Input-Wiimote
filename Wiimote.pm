@@ -1,10 +1,20 @@
-        package Wiimote;
+        package Linux::Input::Wiimote;
 
         use strict;
         use warnings;
 
         require Exporter;
         require DynaLoader;
+
+        our @ISA = qw(Exporter DynaLoader);
+
+        # Items to export into callers namespace by default. Note: do not export
+        # names by default without a very good reason. Use EXPORT_OK instead.
+        # Do not simply export all your public functions/methods/constants.
+        our @EXPORT = qw( );
+        our $VERSION = '0.02';
+
+        bootstrap Linux::Input::Wiimote ;
 
         use constant {
             WIIMOTE_KEYS_OFFSET_HOME      => 0,
@@ -36,9 +46,9 @@
             c_wiimote_connect($id);
         }
 
-        sub is_open {
+        sub wiimote_is_open {
             my $self = shift;
-            return c_is_open();
+            return c_wiimote_is_open();
         }
 
         sub wiimote_update {
@@ -138,6 +148,21 @@
             return c_get_wiimote_tilt_z();
         }
 
+        sub get_wiimote_force_x {
+            my $self = shift;
+            return c_get_wiimote_force_x();
+        }
+
+        sub get_wiimote_force_y {
+            my $self = shift;
+            return c_get_wiimote_force_y();
+        }
+
+        sub get_wiimote_force_z {
+            my $self = shift;
+            return c_get_wiimote_force_z();
+        }
+
         sub activate_wiimote_accelerometer {
             my $self = shift;
             c_activate_wiimote_accelerometer();
@@ -224,25 +249,7 @@
             return $self;
         }
 
-        our @ISA = qw(Exporter DynaLoader);
 
-        # Items to export into callers namespace by default. Note: do not export
-        # names by default without a very good reason. Use EXPORT_OK instead.
-        # Do not simply export all your public functions/methods/constants.
-        our @EXPORT = qw(
-
-        );
-        our $VERSION = '0.01';
-
-        bootstrap Wiimote $VERSION;
-
-        # Preloaded methods go here.
-
-# Autoload methods go after __END__, and are processed by the autosplit program.
-
-        1;
-        __END__
-        # Below is the stub of documentation for your module. You better edit it!
 =head1 NAME
 
  Wiimote
@@ -252,7 +259,7 @@
  This is a perl interface to the C library libcwiimote ( http://sourceforge.net/projects/libwiimote/ ).
  It implements most of that API and provides access to most functions of the wiimote.
 
- libcwiimote must be installed and the bluetooth dameon must be running
+ libcwiimote version .03 must be installed and the bluetooth dameon must be running
 
  Auto discovery is not yet built in.  You must know the id of your wiimote.  You can use hcitool scan
  to find the id.
@@ -313,8 +320,6 @@
  get_wiimote_keys_left
  get_wiimote_keys_bits
 
-
-
 =head1 Example 
 
  use Wiimote;
@@ -325,17 +330,22 @@
 
  while ( $wii->is_open() ) {
     $wii->wiimote_update();
-    print "Wiimote Key bits: " . $wii->get_wiimote_keys_bits();
+    print "Wiimote Key bits: " . $wii->get_wiimote_keys_bits() . "\n";
  }
 
 =head1 Todo
+ 
   Add support for multiple remotes (it is already in libcmote)
   Add auto descovery of wiimote 
   Add make test
 
-=head1 Bugs
- wiimote_discover can cause a segfault
- 
+
+=head1 Bugs 
+
+  wiimote_discover can cause a segfault
+  tilt and force are not returning correct values.  This broke with latest version of libcwiimote .03
+
+  
 =head1 Author
 
    Chad Phillips chad@chadphillips.org http://www.windmeadow.com
@@ -356,6 +366,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  
-
-
 =cut
+
+1;

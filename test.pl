@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 use ExtUtils::testlib;
-use Wiimote;
+use Linux::Input::Wiimote;
 
 print qq!
          test.pl - libcwiimote perl module test application
@@ -12,18 +12,22 @@ print qq!
         Press buttons 1 and 2 on the wiimote now to connect.
 !;
 
-my $wii = new Wiimote;
+my $wii = new Linux::Input::Wiimote;
 
-print "Connect " . $wii->wiimote_connect('00:19:1D:75:CC:30');
+print "Connect " . $wii->wiimote_connect('00:19:1D:A0:F7:95');
 print "\n-------------------\n";
 
-print "Is open: " . $wii->is_open();
+print "Is open: " . $wii->wiimote_is_open();
 print "\n-------------------\n";
-while ( $wii->is_open() ) {
-    $wii->wiimote_update();
-    $wii->set_wiimote_rumble(0);
+while ( $wii->wiimote_is_open()  > -1) {
+    if ( $wii->wiimote_update() < 0) {
+        $wii->wiimote_disconnect();
+        print "stop on bad update \n";
+        exit;
+    }
     if ( $wii->get_wiimote_keys_1 ) {
-        $wii->set_wiimote_rumble(1);
+        #$wii->set_wiimote_rumble(1);
+        $wii->set_wiimote_ir(1);
     }
     else {
         $wii->set_wiimote_rumble(0);
@@ -48,6 +52,11 @@ while ( $wii->is_open() ) {
     print " z tilt : " . $wii->get_wiimote_tilt_z();
     print "\n";
 
+    print "Wiimote X force : " . $wii->get_wiimote_force_x();
+    print " y force : " . $wii->get_wiimote_force_y();
+    print " z force : " . $wii->get_wiimote_force_z();
+    print "\n";
+
     print "nunchuck X : " . $wii->get_wiimote_ext_nunchuk_axis_x();
     print " Y : " . $wii->get_wiimote_ext_nunchuk_axis_y();
     print " Z : " . $wii->get_wiimote_ext_nunchuk_axis_z();
@@ -58,7 +67,10 @@ while ( $wii->is_open() ) {
     print "\n-------------------\n";
 
     if ( $wii->get_wiimote_keys_home ) {
+        print "open  = " . $wii->wiimote_is_open() ."\n";
         $wii->wiimote_disconnect();
+        print "open2  = " . $wii->wiimote_is_open() ."\n";
+        exit; 
     }
     if ( $wii->get_wiimote_keys_up ) {
         print "\n UP \n";
