@@ -1,15 +1,30 @@
-use ExtUtils::MakeMaker;
+use inc::Module::Install 0.68;
+use ExtUtils::Liblist;
+use lib 'inc';
+use Devel::AssertOS 'Linux';
 
-        $lib_path = '-lcwiimote -lbluetooth ';
+if ( -e 'MANIFEST.SKIP' ) {
+    system( 'pod2text lib/Linux/Input/Wiimote.pm > README' );
 
+    include 'Devel::AssertOS';
+    include 'Devel::AssertOS::Linux';
+}
 
-        # See lib/ExtUtils/MakeMaker.pm for details of how to influence
-        # the contents of the Makefile that is written.
-        WriteMakefile(
-            NAME         => 'Linux::Input::Wiimote',
-            VERSION_FROM => 'Wiimote.pm', # finds $VERSION
-            LIBS         => [$lib_path],   # e.g., '-lm'
-            DEFINE       => '-D_ENABLE_TILT -D_ENABLE_FORCE',     # e.g., '-DHAVE_SOMETHING'
-            INC          => '-I./src',     # e.g., '-I/usr/include/other'
-        );
-            #LIBS         => [''],   # e.g., '-lm'
+my @libvars = ExtUtils::Liblist->ext( '-lcwiimote -lbluetooth', 0, 1 );
+
+if( @{ $libvars[ 4 ] } != 2 ) {
+    die 'libcwiimote or libbluetooth not installed; aborting.';
+}
+
+name 'Linux-Input-Wiimote';
+all_from 'lib/Linux/Input/Wiimote.pm';
+
+test_requires 'Test::More';
+
+makemaker_args
+    INC    => '-Isrc/libwiimote-0.4/src',
+    LIBS   => $libvars[ 2 ],
+    DEFINE => '-D_ENABLE_TILT -D_ENABLE_FORCE';
+
+auto_install;
+WriteAll;
