@@ -15,4 +15,4 @@ no_index:
   directory: 
     - inc
     - t
-version: 0.04000
+version: 0.04001
