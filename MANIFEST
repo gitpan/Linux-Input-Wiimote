@@ -2,6 +2,8 @@ Changes
 examples/test.pl
 inc/Devel/AssertOS.pm
 inc/Devel/AssertOS/Linux.pm
+inc/Devel/CheckLib.pm
+inc/Devel/CheckOS.pm
 inc/Module/AutoInstall.pm
 inc/Module/Install.pm
 inc/Module/Install/AutoInstall.pm
